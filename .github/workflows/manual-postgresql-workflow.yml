@@ -3,7 +3,9 @@ name: postgreSQL service with check.
 on:
   workflow_dispatch: # Trigger manually
 
-services:
+jobs:
+  runs-on: ubuntu-latest
+  services:
   postgres_database:
     image: postgres:15
     env:
