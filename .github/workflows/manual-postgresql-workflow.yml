@@ -1,19 +1,19 @@
 name: PostgreSQL service with check
 
 on:
-  workflow_dispatch: # Trigger manually
+  workflow_dispatch:
 
 jobs:
-  postgres-test:
+  postgres-job:
     runs-on: ubuntu-latest
 
     services:
-      postgres_database:
+      postgres:
         image: postgres:15
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: password
-          POSTGRES_DB: gitHub_actions_db
+          POSTGRES_DB: testdb
         ports:
           - 5432:5432
         options: >-
@@ -23,10 +23,10 @@ jobs:
           --health-retries 5
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Install PostgreSQL Client
+      - name: Install PostgreSQL client
         run: |
           sudo apt-get update
           sudo apt-get install -y postgresql-client
@@ -35,4 +35,4 @@ jobs:
         env:
           PGPASSWORD: password
         run: |
-          psql -h localhost -p 5432 -U postgres -d gitHub_actions_db -c "SELECT version();"
+          psql -h localhost -U postgres -d testdb -c "SELECT version();"
