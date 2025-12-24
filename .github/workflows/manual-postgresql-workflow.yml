@@ -1,0 +1,30 @@
+name: postgreSQL service with check.
+
+on:
+  workflow_dispatch: # Trigger manually
+
+services:
+  postgres_database:
+    image: postgres:15
+    env:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: gitHub_actions_db
+    options: >-
+      --health-cmd pg_isready
+      --health-interval 10s
+      --health-timeout 5s
+      --health-retries 5 
+steps:
+  # Checkout the repository code 
+  - name: Checkout code
+    uses: actions/checkout@v3
+  # install the PostgreSQL client on the runner.
+  - name: Install PostgreSQL Client
+    run: sudo apt-get install -y postgresql-client
+  # run the psql command to connect to the PosgreSQL database  and execute a SQL query. 
+  - name: Connect to PostgreSQL and run query
+    env:
+      PGPASSWORD: password
+    run: |
+      psql -h localhost -U postgres -d gitHub_actions_db -c "SELECT version();"
