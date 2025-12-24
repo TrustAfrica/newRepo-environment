@@ -15,16 +15,16 @@ services:
       --health-interval 10s
       --health-timeout 5s
       --health-retries 5 
-steps:
-  # Checkout the repository code 
-  - name: Checkout code
-    uses: actions/checkout@v3
-  # install the PostgreSQL client on the runner.
-  - name: Install PostgreSQL Client
-    run: sudo apt-get install -y postgresql-client
-  # run the psql command to connect to the PosgreSQL database  and execute a SQL query. 
-  - name: Connect to PostgreSQL and run query
-    env:
-      PGPASSWORD: password
-    run: |
-      psql -h localhost -U postgres -d gitHub_actions_db -c "SELECT version();"
+    steps:
+      # Checkout the repository code 
+      - name: Checkout code
+        uses: actions/checkout@v3
+      # install the PostgreSQL client on the runner.
+      - name: Install PostgreSQL Client
+        run: sudo apt-get install -y postgresql-client
+      # run the psql command to connect to the PosgreSQL database  and execute a SQL query. 
+      - name: Connect to PostgreSQL and run query
+        env:
+          PGPASSWORD: password
+        run: |
+          psql -h localhost -U postgres -d gitHub_actions_db -c "SELECT version();"
